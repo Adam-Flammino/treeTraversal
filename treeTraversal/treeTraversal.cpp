@@ -22,6 +22,11 @@ public:
 	tree()
 	{
 		root = nullptr;
+		nil = new node;
+		nil->red = false;
+		nil->left = nil;
+		nil->right = nil;
+		nil->parent = nil;
 	}
 	// Destructor
 	~tree()
@@ -35,10 +40,10 @@ public:
 		{
 			root = new node;
 			root->value = key;
-			root->left = nullptr;
-			root->right = nullptr;
+			root->left = nil;
+			root->right = nil;
 			root->red = false; // Root is always black
-			root->parent = nullptr;
+			root->parent = nil;
 		}
 		else
 		{
@@ -66,18 +71,20 @@ public:
 private:
 	bool first; // Tracks if it's the first time through a traversal function for printing
 	node *root;
+	node *temp;
+	node *nil;
 	bool sibling1; // Used for checking if siblings are the same color
 	bool sibling2;
 	// Recursively destroys tree
 	void destroy(node *leaf)
 	{
-		if (leaf != nullptr)
+		if (leaf != nil)
 		{
-			if (leaf->left != nullptr)
+			if (leaf->left != nil)
 			{
 				destroy(leaf->left);
 			}
-			if (leaf->right != nullptr)
+			if (leaf->right != nil)
 			{
 				destroy(leaf->right);
 			}
@@ -90,7 +97,7 @@ private:
 		// Traverses right until it finds a spot for the leaf
 		if (key >= leaf->value)
 		{
-			if (leaf->right != nullptr)
+			if (leaf->right != nil)
 			{
 				insert(key, leaf->right); //Recursive call
 			}
@@ -101,15 +108,15 @@ private:
 				leaf->right->value = key;
 				leaf->right->parent = leaf;
 				leaf->right->red = true; // New leaves start as red
-				leaf->right->left = nullptr;
-				leaf->right->right = nullptr;
+				leaf->right->left = nil;
+				leaf->right->right = nil;
 				cleanUp(leaf->right);
 			}
 		}
 		// Traverses left until it finds a spot for the leaf
 		else
 		{
-			if (leaf->left != nullptr)
+			if (leaf->left != nil)
 			{
 				insert(key, leaf->left); //Recursive call
 			}
@@ -120,16 +127,67 @@ private:
 				leaf->left->value = key;
 				leaf->left->parent = leaf;
 				leaf->left->red = true; // New leaves start as red
-				leaf->left->left = nullptr;
-				leaf->left->right = nullptr;
+				leaf->left->left = nil;
+				leaf->left->right = nil;
 				cleanUp(leaf->left);
 			}
 		}
 	}
 
+
 	// Recolors and balances tree
 	void cleanUp(node *newLeaf)
 	{
+		while (newLeaf->parent->red)
+		{
+			if (newLeaf->parent == newLeaf->parent->parent->left)
+			{
+				temp = newLeaf->parent->parent->right;
+				if (temp->red)
+				{
+					newLeaf->parent->red = false;
+					temp->red = false;
+					newLeaf->parent->parent->red = true;
+					newLeaf = newLeaf->parent->parent;
+				}
+				else
+				{
+					if (newLeaf == newLeaf->parent->right)
+					{
+						newLeaf = newLeaf->parent;
+						rotateLeft(newLeaf->parent->parent);
+					}
+					newLeaf->parent->red = false;
+						newLeaf->parent->parent->red = true;
+						rotateRight(newLeaf->parent->parent);
+				}
+			}
+			else
+			{
+				temp = newLeaf->parent->parent->left;
+				if (temp->red)
+				{
+					newLeaf->parent->red = false;
+					temp->red = false;
+					newLeaf->parent->parent->red = true;
+					newLeaf = newLeaf->parent->parent;
+				}
+				else
+				{
+					if (newLeaf == newLeaf->parent->left)
+					{
+						newLeaf = newLeaf->parent;
+						rotateRight(newLeaf->parent->parent);
+					}
+					newLeaf->parent->red = false;
+						newLeaf->parent->parent->red = true;
+						rotateLeft(newLeaf->parent->parent);
+				}
+			}
+		}
+		root->red = false;
+	}
+		/*
 		while (newLeaf->parent->red) {
 			if (newLeaf->parent->red) // Red parents can't have red children
 			{
@@ -162,30 +220,107 @@ private:
 			root->red = false; // Keeping root black here prevents trying to find root's parent
 		}
 	}
+		*/
 	// Rotates subtree right
 	void rotateRight(node *subRoot)
 	{
-		node *temp = subRoot->left;
-		if (temp->right != nullptr)
+		temp = subRoot->left;
+		subRoot->left = temp->right;
+		if (temp->right != nil)
 		{
-			subRoot->left->value = temp->right->value;
-			temp->right = subRoot;
+			temp->right->parent = subRoot;
 		}
-		subRoot = temp;
-		delete temp;
+		temp->parent = subRoot->parent;
+		if (subRoot == subRoot ->parent->left)
+		{
+			subRoot->parent->left = temp;
+		}
+		else
+		{
+			subRoot->parent->right = temp;
+		}
+		temp->right = subRoot;
+		subRoot->parent = temp;
 	}
-	// Rotates subtree left
-	void rotateLeft(node *subroot)
+	/*
+	 void rotateRight(node *subRoot)
 	{
-		node *temp = subroot->right;
-		if (temp->left != nullptr)
+		temp = subRoot->left;
+		subRoot->left = temp->right;
+		if (temp->right != nil)
 		{
-			subroot->right->value = temp->left->value;
-			temp->left = subroot;
+			temp->right->parent = subRoot;
 		}
-		subroot = temp;
-		delete temp;
+		temp->parent = subRoot->parent;
+		if (subRoot->parent == nil)
+		{
+			root = temp;
+		}
+		else
+		{
+			if (subRoot == subRoot->parent->right)
+			{
+				subRoot->parent->right = temp;
+			}
+			else
+			{
+				subRoot->parent->left = temp;
+			}
+		}
+		temp->right = subRoot;
+		subRoot->parent = temp;
 	}
+	*/
+	// Rotates subtree left
+	void rotateLeft(node *subRoot)
+	{
+		temp = subRoot->right;
+		subRoot->right = temp->left;
+		if (temp->right != nil)
+		{
+			temp->left->parent = subRoot;
+		}
+		temp->parent = subRoot->parent;
+		if (subRoot == subRoot->parent->left)
+		{
+			subRoot->parent->left = temp;
+		}
+		else
+		{
+			subRoot->parent->right = temp;
+		}
+		temp->left = subRoot;
+		subRoot->parent = temp;
+	}
+	/*
+	void rotateLeft(node *subRoot)
+	{
+		temp = subRoot->right;
+		subRoot->right = temp->left;
+		if (temp->left != nil)
+		{
+			temp->left->parent = subRoot;
+		}
+		temp->parent = subRoot->parent;
+		if (subRoot->parent == nil)
+		{
+			root = temp;
+		}
+		else
+		{
+			if (subRoot == subRoot->parent->right)
+			{
+				subRoot->parent->left = temp;
+			}
+			else
+			{
+				subRoot->parent->right = temp;
+			}
+		}
+		temp->left = subRoot;
+		subRoot->parent = temp;
+	}
+	*/
 	// Prints tree in order
 	void inOrder (node *localRoot)
 	{
@@ -194,7 +329,7 @@ private:
 			std::cout << "Nodes traversed in order" << std::endl;
 			first = false;
 		}
-		if (localRoot != nullptr)
+		if (localRoot != nil)
 		{
 			inOrder(localRoot->left); // Goes left
 			std::cout << localRoot->value << " "; // Prints current node
@@ -209,7 +344,7 @@ private:
 			std::cout << "Nodes traversed pre order" << std::endl;
 			first = false;
 		}
-		if (localRoot != nullptr)
+		if (localRoot != nil)
 		{
 			std::cout << localRoot->value << " "; // Prints current node
 			preOrder(localRoot->left); // Goes left
@@ -224,7 +359,7 @@ private:
 			std::cout << "Nodes traversed post order" << std::endl;
 			first = false;
 		}
-		if (localRoot != nullptr)
+		if (localRoot != nil)
 		{
 			postOrder(localRoot->left); // Goes left
 			postOrder(localRoot->right); // Goes right
