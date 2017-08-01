@@ -1,6 +1,6 @@
 // treeTraversal.cpp
-// Adam Flammino 7/25 SDEV-345
-// Builds and traverses a binary tree
+// Adam Flammino 7/30 SDEV-345
+// Builds and traverses a red black
 
 #include "stdafx.h"
 #include <iostream>
@@ -286,13 +286,12 @@ private:
 int main()
 {
 	tree t;
-	t.insert(2);
+	t.insert(30);
+	t.insert(28);
+	t.insert(21);
+	t.insert(11);
+	t.insert(17);
 	t.insert(4);
-	t.insert(1);
-	t.insert(12);
-	t.insert(8);
-	t.insert(105);
-	t.insert(6);
 	t.inOrder();
 	std::cout << std::endl;
 	t.preOrder();
