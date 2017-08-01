@@ -1,6 +1,6 @@
 // treeTraversal.cpp
 // Adam Flammino 7/30 SDEV-345
-// Builds and traverses a red black
+// Builds and traverses a red black tree
 
 #include "stdafx.h"
 #include <iostream>
@@ -73,8 +73,6 @@ private:
 	node *root;
 	node *temp;
 	node *nil;
-	bool sibling1; // Used for checking if siblings are the same color
-	bool sibling2;
 	// Recursively destroys tree
 	void destroy(node *leaf)
 	{
