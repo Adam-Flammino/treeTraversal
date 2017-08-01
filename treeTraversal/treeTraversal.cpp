@@ -225,19 +225,23 @@ private:
 	void rotateRight(node *subRoot)
 	{
 		temp = subRoot->left;
-		subRoot->left = temp->right;
+		subRoot->left = temp->right; // Left subtree to right subtree
 		if (temp->right != nil)
 		{
 			temp->right->parent = subRoot;
 		}
 		temp->parent = subRoot->parent;
-		if (subRoot == subRoot ->parent->left)
+		if (subRoot->parent == nil)
 		{
-			subRoot->parent->left = temp;
+			root = temp;
+		}
+		else if (subRoot == subRoot->parent->right)
+		{
+			subRoot->parent->right = temp;
 		}
 		else
 		{
-			subRoot->parent->right = temp;
+			subRoot->parent->left = temp;
 		}
 		temp->right = subRoot;
 		subRoot->parent = temp;
@@ -275,13 +279,17 @@ private:
 	void rotateLeft(node *subRoot)
 	{
 		temp = subRoot->right;
-		subRoot->right = temp->left;
-		if (temp->right != nil)
+		subRoot->right = temp->left; // Left subtree to right subtree
+		if (temp->left != nil)
 		{
 			temp->left->parent = subRoot;
 		}
 		temp->parent = subRoot->parent;
-		if (subRoot == subRoot->parent->left)
+		if (subRoot->parent == nil)
+		{
+			root = temp;
+		}
+		else if (subRoot == subRoot->parent->left)
 		{
 			subRoot->parent->left = temp;
 		}
