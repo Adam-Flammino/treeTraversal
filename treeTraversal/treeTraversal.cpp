@@ -133,8 +133,6 @@ private:
 			}
 		}
 	}
-
-
 	// Recolors and balances tree
 	void cleanUp(node *newLeaf)
 	{
@@ -187,92 +185,7 @@ private:
 		}
 		root->red = false;
 	}
-		/*
-		while (newLeaf->parent->red)
-		{
-			if (newLeaf->parent == newLeaf->parent->parent->left)
-			{
-				temp = newLeaf->parent->parent->right;
-				if (temp->red)
-				{
-					newLeaf->parent->red = false;
-					temp->red = false;
-					newLeaf->parent->parent->red = true;
-					newLeaf = newLeaf->parent->parent;
-				}
-				else
-				{
-					if (newLeaf == newLeaf->parent->right)
-					{
-						newLeaf = newLeaf->parent;
-						rotateLeft(newLeaf->parent->parent);
-					}
-					newLeaf->parent->red = false;
-						newLeaf->parent->parent->red = true;
-						rotateRight(newLeaf->parent->parent);
-				}
-			}
-			else
-			{
-				temp = newLeaf->parent->parent->left;
-				if (temp->red)
-				{
-					newLeaf->parent->red = false;
-					temp->red = false;
-					newLeaf->parent->parent->red = true;
-					newLeaf = newLeaf->parent->parent;
-				}
-				else
-				{
-					if (newLeaf == newLeaf->parent->left)
-					{
-						newLeaf = newLeaf->parent;
-						rotateRight(newLeaf->parent->parent);
-					}
-					newLeaf->parent->red = false;
-						newLeaf->parent->parent->red = true;
-						rotateLeft(newLeaf->parent->parent);
-				}
-			}
-		}
-		root->red = false;
-	}
 
-	*/
-		/*
-		while (newLeaf->parent->red) {
-			if (newLeaf->parent->red) // Red parents can't have red children
-			{
-				sibling1 = false; // Defaults siblings to black in case one doesn't exist
-				sibling2 = false;
-				if (newLeaf->parent->parent->left != nullptr) // Makes sure left sibling exists
-				{
-					sibling1 = newLeaf->parent->parent->left->red; // Get color of left sibling
-					newLeaf->parent->parent->left->red = false; // Color left sibling black
-				}
-				if (newLeaf->parent->parent->right != nullptr) // Makes sure right sibling exists
-				{
-					sibling2 = newLeaf->parent->parent->right->red; // Get color of right sibling
-					newLeaf->parent->parent->right->red = false; // Color right sibling black
-				}
-				newLeaf->parent->parent->red = true; // Recolor grandparent to red
-				if (!(sibling1 && sibling2)) // If parent doesn't have a red sibling, rotate
-				{
-					if (newLeaf->parent->left != nullptr)
-					{
-						rotateRight(newLeaf->parent);
-					}
-					else
-					{
-						rotateLeft(newLeaf->parent);
-					}
-				}
-			}
-			newLeaf = newLeaf->parent; // Goes up a level
-			root->red = false; // Keeping root black here prevents trying to find root's parent
-		}
-	}
-		*/
 	// Rotates subtree right
 	void rotateRight(node *subRoot)
 	{
@@ -298,35 +211,6 @@ private:
 		temp->right = subRoot;
 		subRoot->parent = temp;
 	}
-	/*
-	 void rotateRight(node *subRoot)
-	{
-		temp = subRoot->left;
-		subRoot->left = temp->right;
-		if (temp->right != nil)
-		{
-			temp->right->parent = subRoot;
-		}
-		temp->parent = subRoot->parent;
-		if (subRoot->parent == nil)
-		{
-			root = temp;
-		}
-		else
-		{
-			if (subRoot == subRoot->parent->right)
-			{
-				subRoot->parent->right = temp;
-			}
-			else
-			{
-				subRoot->parent->left = temp;
-			}
-		}
-		temp->right = subRoot;
-		subRoot->parent = temp;
-	}
-	*/
 	// Rotates subtree left
 	void rotateLeft(node *subRoot)
 	{
@@ -352,35 +236,6 @@ private:
 		temp->left = subRoot;
 		subRoot->parent = temp;
 	}
-	/*
-	void rotateLeft(node *subRoot)
-	{
-		temp = subRoot->right;
-		subRoot->right = temp->left;
-		if (temp->left != nil)
-		{
-			temp->left->parent = subRoot;
-		}
-		temp->parent = subRoot->parent;
-		if (subRoot->parent == nil)
-		{
-			root = temp;
-		}
-		else
-		{
-			if (subRoot == subRoot->parent->right)
-			{
-				subRoot->parent->left = temp;
-			}
-			else
-			{
-				subRoot->parent->right = temp;
-			}
-		}
-		temp->left = subRoot;
-		subRoot->parent = temp;
-	}
-	*/
 	// Prints tree in order
 	void inOrder (node *localRoot)
 	{
