@@ -150,6 +150,56 @@ private:
 					newLeaf->parent->parent->red = true;
 					newLeaf = newLeaf->parent->parent;
 				}
+				else 
+				{
+					if (newLeaf == newLeaf->parent->right)
+					{
+						newLeaf = newLeaf->parent;
+						rotateLeft(newLeaf);
+					}
+					newLeaf->parent->red = false;
+					newLeaf->parent->parent->red = true;
+					rotateRight(newLeaf->parent->parent);
+				}
+			}
+			else
+			{
+				temp = newLeaf->parent->parent->left;
+				if (temp->red)
+				{
+					newLeaf->parent->red = false;
+					temp->red = false;
+					newLeaf->parent->parent->red = true;
+					newLeaf = newLeaf->parent->parent;
+				}
+				else
+				{
+					if (newLeaf == newLeaf->parent->left)
+					{
+						newLeaf = newLeaf->parent;
+						rotateRight(newLeaf);
+					}
+					newLeaf->parent->red = false;
+					newLeaf->parent->parent->red = true;
+					rotateLeft(newLeaf->parent->parent);
+				}
+			}
+		}
+		root->red = false;
+	}
+		/*
+		while (newLeaf->parent->red)
+		{
+			if (newLeaf->parent == newLeaf->parent->parent->left)
+			{
+				temp = newLeaf->parent->parent->right;
+				if (temp->red)
+				{
+					newLeaf->parent->red = false;
+					temp->red = false;
+					newLeaf->parent->parent->red = true;
+					newLeaf = newLeaf->parent->parent;
+				}
 				else
 				{
 					if (newLeaf == newLeaf->parent->right)
@@ -187,6 +237,8 @@ private:
 		}
 		root->red = false;
 	}
+
+	*/
 		/*
 		while (newLeaf->parent->red) {
 			if (newLeaf->parent->red) // Red parents can't have red children
